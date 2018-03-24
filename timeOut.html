@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="http://lib.sinaapp.com/js/jquery/1.8.2/jquery.min.js"></script>
+	<style type="text/css">
+	font{display:block;}
+	font:nth-last-of-type(1),font:nth-last-of-type(2){background:#288bde;color:#fff;}
+	.bao,.follow{position: fixed;right: 20px;cursor: pointer;bottom: 20px;width: 200px;height: 100px;font-size: 30px;font-weight: bold;}
+	.follow{bottom:140px;}
+	</style>
+<script type="text/javascript">
+$(function(){
+	var s=1,y,bing,m=0,tiao=33300,longLen=0,flsw=true;
+	$(".bao").click(function(){
+		longLen=longLen+1;
+		$(this).val("主宰("+longLen+")");
+	}).dblclick(function(){
+		longLen=0;
+		$(this).val("主宰");
+	})
+	$(".follow").click(function(){
+		if(flsw){
+			flsw=false;
+			$(this).val("跟随(关)");
+		}else{
+			flsw=true;
+			$(this).val("跟随(开)");
+		}
+	})
+	function startTime(){
+		y=(s*33.25)+10;	/* 开局出兵时间 */
+
+		/* 判断大龙次数 */
+		if(longLen>0){
+			y=y-(6*longLen)
+		}
+
+		m=y/60;
+		y=y%60;
+		if(m<10){
+			m="0"+parseInt(m);
+		}else{
+			m=parseInt(m);
+		}
+		if(y<10){
+			y="0"+parseInt(y);
+		}else{
+			y=parseInt(y);
+		}
+		$("body").append("<font data-s='"+s+"'>"+m+":"+y+"</font>");
+		s++;
+		bing=setTimeout(startTime,tiao);
+		if(flsw){
+			$("body,html").animate({
+				scrollTop:$("html").height()
+			})
+		}
+
+		/* 重置出兵时间 */
+		$("body font").click(function(){
+			s=parseInt($(this).attr("data-s"))+1;
+			var len=$("body font").index($(this));
+			$("body font:gt("+len+")").remove();
+		})
+	}
+	setTimeout(startTime,tiao);
+})
+</script>
+</head>
+
+<body>
+<input type="button" class="bao" value="主宰" />
+<input type="button" class="follow" value="跟随(开)" />
+<font data-s='0'>00:10</font>
+</body>
+</html>
